@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register the commands that can be called from the extension's package.json
 	context.subscriptions.push(
-		vscode.commands.registerCommand('chatgpt.ask', () => 
+		vscode.commands.registerCommand('chatgpt.ask', () =>
 			vscode.window.showInputBox({ prompt: 'What do you want to do?' })
 			.then((value) => provider.search(value))
 		),
@@ -75,6 +75,7 @@ export function activate(context: vscode.ExtensionContext) {
 			provider.setSettings({ keepConversation: config.get('keepConversation') || false });
 		} else if (event.affectsConfiguration('chatgpt.timeoutLength')) {
 			const config = vscode.workspace.getConfiguration('chatgpt');
+			console.log(config);
 			provider.setSettings({ timeoutLength: config.get('timeoutLength') || 60 });
 		}
 	});
@@ -109,7 +110,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 	constructor(private readonly _extensionUri: vscode.Uri) {
 
 	}
-	
+
 	// Set the API key and create a new API instance based on this key
 	public setAuthenticationInfo(authInfo: AuthInfo) {
 		this._authInfo = authInfo;
@@ -209,7 +210,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 		} else {
 			this._view?.show?.(true);
 		}
-		
+
 		let response = '';
 		this._response = '';
 		// Get the selected text of the active editor
@@ -238,7 +239,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 		} else {
 			// If successfully signed in
 			console.log("sendMessage");
-			
+
 			// Make sure the prompt is shown
 			this._view?.webview.postMessage({ type: 'setPrompt', value: this._prompt });
 			this._view?.webview.postMessage({ type: 'addResponse', value: '...' });
@@ -328,7 +329,7 @@ class ChatGPTViewProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<input class="h-10 w-full text-white bg-stone-700 p-4 text-sm" placeholder="Ask ChatGPT something" id="prompt-input" />
-				
+
 				<div id="response" class="pt-4 text-sm">
 				</div>
 
